@@ -1,4 +1,9 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, request
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -6,6 +11,10 @@ app = Flask(__name__)
 users = {}
 candidates = {}
 votes = {}
+
+@app.route('/')
+def index():
+    return "Welcome to the College Voting System API!"
 
 @app.route('/ussd', methods=['POST'])
 def ussd():
@@ -49,5 +58,4 @@ def ussd():
     return response
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
