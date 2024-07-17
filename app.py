@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 # Load environment variables from .env file
 load_dotenv()
@@ -80,6 +80,20 @@ def ussd():
         response = "END Invalid option."
 
     return response
+
+@app.route('/callback', methods=['POST'])
+def callback():
+    data = request.json
+    # Process the data here
+    # For example, you can log the data or handle different status codes
+    message_id = data['entry']['messageId']
+    status = data['entry']['status']
+    status_code = data['entry']['statusCode']
+    
+    # Log or handle the message status update
+    print(f"Message ID: {message_id}, Status: {status}, Status Code: {status_code}")
+    
+    return jsonify(success=True), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
