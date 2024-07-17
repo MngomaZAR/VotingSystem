@@ -16,8 +16,12 @@ votes = {}
 def index():
     return "Welcome to the College Voting System API!"
 
-@app.route('/ussd', methods=['POST'])
+@app.route('/ussd', methods=['GET', 'POST'])
 def ussd():
+    if request.method == 'GET':
+        return "This endpoint requires a POST request."
+
+    # Handle POST request
     session_id = request.form['sessionId']
     service_code = request.form['serviceCode']
     phone_number = request.form['phoneNumber']
