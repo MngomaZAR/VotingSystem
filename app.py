@@ -16,19 +16,12 @@ votes = {}
 def index():
     return "Welcome to the College Voting System API!"
 
-@app.route('/ussd', methods=['GET', 'POST'])
+@app.route('/ussd', methods=['POST'])
 def ussd():
-    if request.method == 'GET':
-        return "This endpoint requires a POST request."
-
-    # Handle POST request
-    try:
-        session_id = request.form['sessionId']
-        service_code = request.form['serviceCode']
-        phone_number = request.form['phoneNumber']
-        text = request.form['text']
-    except KeyError as e:
-        return f"END Missing parameter: {str(e)}"
+    session_id = request.values.get("sessionId", None)
+    service_code = request.values.get("serviceCode", None)
+    phone_number = request.values.get("phoneNumber", None)
+    text = request.values.get("text", "default")
 
     if text == "":
         response = "CON Welcome to College Voting System\n"

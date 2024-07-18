@@ -1,0 +1,33 @@
+# Example: Initial request to display the main menu
+Invoke-WebRequest -Uri "http://127.0.0.1:5000/ussd" `
+                  -Method POST `
+                  -ContentType "application/x-www-form-urlencoded" `
+                  -Body "sessionId=12345&serviceCode=*384*202407#&phoneNumber=+123456789&text="
+
+
+# Register a user with name "John Doe"
+Invoke-WebRequest -Uri "http://127.0.0.1:5000/ussd" `
+                  -Method POST `
+                  -ContentType "application/x-www-form-urlencoded" `
+                  -Body "sessionId=12345&serviceCode=*384*202407#&phoneNumber=+123456789&text=1*John Doe"
+
+
+# Vote for candidate "Alice"
+Invoke-WebRequest -Uri "http://127.0.0.1:5000/ussd" `
+                  -Method POST `
+                  -ContentType "application/x-www-form-urlencoded" `
+                  -Body "sessionId=12345&serviceCode=*384*202407#&phoneNumber=+123456789&text=3*Alice"
+
+
+# View voting results
+Invoke-WebRequest -Uri "http://127.0.0.1:5000/ussd" `
+                  -Method POST `
+                  -ContentType "application/x-www-form-urlencoded" `
+                  -Body "sessionId=12345&serviceCode=*384*202407#&phoneNumber=+123456789&text=4"
+
+
+                  $response = Invoke-WebRequest -Uri "http://127.0.0.1:5000/ussd" `
+                  -Method POST `
+                  -ContentType "application/x-www-form-urlencoded" `
+                  -Body "sessionId=12345&serviceCode=*384*202407#&phoneNumber=+123456789&text="
+$response.Content
