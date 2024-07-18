@@ -1,9 +1,4 @@
-import os
-from dotenv import load_dotenv
-from flask import Flask, request, jsonify
-
-# Load environment variables from .env file
-load_dotenv()
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -17,11 +12,11 @@ def index():
     return "Welcome to the College Voting System API!"
 
 @app.route('/ussd', methods=['POST'])
-def ussd():
+def ussd_callback():
     session_id = request.values.get("sessionId", None)
     service_code = request.values.get("serviceCode", None)
     phone_number = request.values.get("phoneNumber", None)
-    text = request.values.get("text", "default")
+    text = request.values.get("text", "")
 
     if text == "":
         response = "CON Welcome to College Voting System\n"
@@ -34,7 +29,7 @@ def ussd():
     elif text.startswith("1*"):
         name = text.split('*')[1]
         if name.strip():
-            users[phone_number] = name  # Register user
+            users[phone_number] = name
             response = f"END Registration successful for {name}."
         else:
             response = "END Name cannot be empty."
@@ -44,7 +39,7 @@ def ussd():
         candidate_name = text.split('*')[1]
         if candidate_name.strip():
             if candidate_name not in candidates:
-                candidates[candidate_name] = 0  # Register candidate with 0 votes
+                candidates[candidate_name] = 0
                 response = f"END Candidate {candidate_name} registered successfully."
             else:
                 response = "END Candidate already registered."
@@ -58,8 +53,8 @@ def ussd():
             if phone_number in votes:
                 response = "END You have already voted."
             else:
-                votes[phone_number] = candidate_name  # Record vote
-                candidates[candidate_name] += 1  # Increment vote count
+                votes[phone_number] = candidate_name
+                candidates[candidate_name] += 1
                 response = f"END Thank you for voting for {candidate_name}."
         else:
             response = "END Candidate not found."
@@ -77,16 +72,8 @@ def ussd():
 @app.route('/callback', methods=['POST'])
 def callback():
     data = request.json
-    # Process the data here
-    # For example, you can log the data or handle different status codes
-    message_id = data['entry']['messageId']
-    status = data['entry']['status']
-    status_code = data['entry']['statusCode']
-    
-    # Log or handle the message status update
-    print(f"Message ID: {message_id}, Status: {status}, Status Code: {status_code}")
-    
+    # Process callback data as needed
     return jsonify(success=True), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
