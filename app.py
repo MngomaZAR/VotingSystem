@@ -1,8 +1,10 @@
 from flask import Flask, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
-# In-memory databases
+# Your in-memory databases
 users = {}
 candidates = {}
 votes = {}
@@ -12,11 +14,11 @@ def index():
     return "Welcome to the College Voting System API!"
 
 @app.route('/ussd', methods=['POST'])
-def ussd_callback():
+def ussd():
     session_id = request.values.get("sessionId", None)
     service_code = request.values.get("serviceCode", None)
     phone_number = request.values.get("phoneNumber", None)
-    text = request.values.get("text", "")
+    text = request.values.get("text", "default")
 
     if text == "":
         response = "CON Welcome to College Voting System\n"
@@ -29,7 +31,7 @@ def ussd_callback():
     elif text.startswith("1*"):
         name = text.split('*')[1]
         if name.strip():
-            users[phone_number] = name
+            users[phone_number] = name  # Register user
             response = f"END Registration successful for {name}."
         else:
             response = "END Name cannot be empty."
@@ -39,7 +41,7 @@ def ussd_callback():
         candidate_name = text.split('*')[1]
         if candidate_name.strip():
             if candidate_name not in candidates:
-                candidates[candidate_name] = 0
+                candidates[candidate_name] = 0  # Register candidate with 0 votes
                 response = f"END Candidate {candidate_name} registered successfully."
             else:
                 response = "END Candidate already registered."
@@ -53,8 +55,8 @@ def ussd_callback():
             if phone_number in votes:
                 response = "END You have already voted."
             else:
-                votes[phone_number] = candidate_name
-                candidates[candidate_name] += 1
+                votes[phone_number] = candidate_name  # Record vote
+                candidates[candidate_name] += 1  # Increment vote count
                 response = f"END Thank you for voting for {candidate_name}."
         else:
             response = "END Candidate not found."
@@ -72,7 +74,15 @@ def ussd_callback():
 @app.route('/callback', methods=['POST'])
 def callback():
     data = request.json
-    # Process callback data as needed
+    # Process the data here
+    # For example, you can log the data or handle different status codes
+    message_id = data['entry']['messageId']
+    status = data['entry']['status']
+    status_code = data['entry']['statusCode']
+    
+    # Log or handle the message status update
+    print(f"Message ID: {message_id}, Status: {status}, Status Code: {status_code}")
+    
     return jsonify(success=True), 200
 
 if __name__ == '__main__':
