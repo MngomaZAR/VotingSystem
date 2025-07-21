@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vote Tally</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+  <h3>Live Vote Results</h3>
+  <a href="/logout" class="btn btn-sm btn-secondary mb-3 float-end">Logout</a>
+  <table class="table table-bordered">
+    <thead>
+      <tr><th>Candidate</th><th>Votes</th></tr>
+    </thead>
+    <tbody>
+      {% for name, count in results.items() %}
+      <tr><td>{{ name }}</td><td>{{ count }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

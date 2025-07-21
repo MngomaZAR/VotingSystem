@@ -1,0 +1,14 @@
+{
+  "1234567890123": {
+    "name": "Samkelo Mngoma",
+    "phone": "+27xxxxxxxxx",
+    "otp": null,
+    "voted": false
+  },
+  "2345678901234": {
+    "name": "Nomvula Dlamini",
+    "phone": "+27xxxxxxxxx",
+    "otp": null,
+    "voted": false
+  }
+}
